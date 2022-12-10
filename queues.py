@@ -26,8 +26,15 @@ class PriorityQueue:
     def __init__(self):
         self._elements = []
     
+    def __len__(self):
+        return len(self._elements)
+
+    def __iter__(self):
+        while len(self) > 0:
+            yield self.dequeue()
+    
     def enqueue_with_priority(self, priority, value):
-        heappush(self._elements, (priority, value))
+        heappush(self._elements, (-priority, value))
     
     def dequeue(self):
-        return heappop(self._elements)
+        return heappop(self._elements)[1]
