@@ -8,7 +8,7 @@ class Queue:
         return len(self._elements)
 
     def __iter__(self):
-        while len > 0:
+        while len(self) > 0:
             yield self.dequeue()
 
     def enqueue(self, element):
