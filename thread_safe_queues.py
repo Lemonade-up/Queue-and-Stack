@@ -59,3 +59,9 @@ class Worker(threading.Thread):
     def state(self):
         if self.working:
             return f"{self.product} ({self.progress}%)"
+    
+    def simulateidle(self):
+        self.product = None
+        self.working = False
+        self.progress = 0
+        sleep(randint(1,3))
