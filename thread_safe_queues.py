@@ -1,7 +1,7 @@
 import argparse
 from queue import LifoQueue, PriorityQueue, Queue
 import threading
-from random import randint
+from random import choice, randint
 from time import sleep
 
 QUEUE_TYPES = {
@@ -65,3 +65,23 @@ class Worker(threading.Thread):
         self.working = False
         self.progress = 0
         sleep(randint(1,3))
+    
+    def simulatework(self):
+        self.working = True
+        self. progress = 0
+        delay = randint(1,  1 + 15 // self.speed)
+        for _ in range(100):
+            sleep(delay / 100)
+            self.progress += 1
+
+class Producer(Worker):
+    def __init__(self, speed, buffer, products):
+        super().__init__(speed, buffer)
+        self.products = products
+    
+    def run(self):
+        self.product = choice(self.products)
+        self.simulatework()
+        self.buffer.put(self.product)
+        self.simulateidle
+    
