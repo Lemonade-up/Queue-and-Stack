@@ -4,7 +4,7 @@ class Queue:
     def __init__(self):
         self._elements = deque()
 
-    def __init__(self,element):
+    def enqueue(self,element):
         self._elements.append(element)
     
     def dequeue(self):
