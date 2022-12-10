@@ -83,5 +83,11 @@ class Producer(Worker):
         self.product = choice(self.products)
         self.simulatework()
         self.buffer.put(self.product)
-        self.simulateidle
-    
+        self.simulateidle()
+class Consumer(Worker):
+    def run(self):
+        while True:
+            self.product = self.buffer.get()
+            self.simulatework()
+            self.buffer.task_done()
+            self.simulateidle()
