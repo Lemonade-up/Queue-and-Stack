@@ -132,13 +132,8 @@ class View:
 
 def main(args):
     buffer = QUEUE_TYPES[args.queue]()
-    producers = [
-        Producer(args.producer_speed, buffer, PRODUCTS)
-        for _ in range(args.producers)
-    ]
-    consumers = [
-        Consumer(args.consumer_speed, buffer) for _ in range(args.consumers)
-    ]
+    producers = [Producer(args.producers_speed, buffer, PRODUCTS) for _ in range(args.producers)]
+    consumers = [Consumer(args.consumers_speed, buffer) for _ in range(args.consumers)]
     for producer in producers:
         producer.start()
     for consumer in consumers:
@@ -148,7 +143,7 @@ def main(args):
 
 def parse_args():
     parser = argparse.ArgumentParser()
-    parser.add_argument("q", "--queue", choices = QUEUE_TYPES, default = "fifo")
+    parser.add_argument("-q", "--queue", choices = QUEUE_TYPES, default = "fifo")
     parser.add_argument("-p", "--producers", type = int, default = 3)
     parser.add_argument("-c", "--consumers", type = int, default = 2)
     parser.add_argument("-ps", "--producers-speed", type = int, default = 1)
