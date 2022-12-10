@@ -22,16 +22,9 @@ class Stack(Queue):
     def dequeue(self):
         return self._elements.pop()
 
-class PriorityQueue:
+class PriorityQueue(Queue):
     def __init__(self):
         self._elements = []
-    
-    def __len__(self):
-        return len(self._elements)
-
-    def __iter__(self):
-        while len(self) > 0:
-            yield self.dequeue()
     
     def enqueue_with_priority(self, priority, value):
         heappush(self._elements, (-priority, value))
