@@ -17,3 +17,28 @@ def parse_args():
     parser.add_argument("-c", "--consumers", type = int, default = 2)
     parser.add_argument("-ps", "--producers-speed", type = int, default = 1)
     parser.add_argument("-cs", "--consumers-speed", type = int, default = 1) 
+    return parser.parse_args()
+
+if __name__ == "__main__":
+    try:
+        main(parse_args())
+    except KeyboardInterrupt:
+        pass
+
+PRODUCTS = (
+    ":balloon:",
+    ":cookie:",
+    ":crystal_ball:",
+    ":diving_mask:",
+    ":flashlight:",
+    ":gem:",
+    ":gift:",
+    ":kite:",
+    ":party_popper:",
+    ":postal_horn:",
+    ":ribbon:",
+    ":rocket:",
+    ":teddy_bear:",
+    ":thread:",
+    ":yo-yo:",
+)
