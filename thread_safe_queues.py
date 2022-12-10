@@ -3,6 +3,13 @@ from queue import LifoQueue, PriorityQueue, Queue
 import threading
 from random import choice, randint
 from time import sleep
+from itertools import zip_longest
+
+from rich.align import Align
+from rich.columns import Columns
+from rich.console import Group
+from rich.live import Live
+from rich.panel import Panel
 
 QUEUE_TYPES = {
     "fifo" : Queue,
@@ -73,6 +80,31 @@ class Worker(threading.Thread):
         for _ in range(100):
             sleep(delay / 100)
             self.progress += 1
+
+class View:
+    def __init__(self, buffer, producers, consumers):
+        self.buffer = buffer
+        self.producers = producers
+        self.consumers = consumers
+
+    def animate(self):
+        with Live(
+            self.render(), screen = True, refresh_per_second=10
+        ) as live:
+            while True:
+                live.update(self.render())
+
+    def render(self):
+        match self.buffer:
+            case PriorityQueue():
+                title = "Priority Queue"
+                products = map(str, reversed(list(self.buffer.queue)))
+            case LifoQueue():
+                title = "Stack"
+                products = list(self.buffer.queue)
+            case Queue():
+                title = "Queue"
+                products = reversed(list(self.buffer.queue))
 
 class Producer(Worker):
     def __init__(self, speed, buffer, products):
