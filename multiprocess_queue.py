@@ -1,3 +1,4 @@
+import queue
 import time
 from hashlib import md5
 from itertools import product
@@ -67,6 +68,8 @@ def chunk_indices(length, num_chunks):
         num_chunks -=1
 
 def main(args):
+    t1 = time.perf_counter()
+
     queue_in = multiprocessing.Queue()
     queue_out = multiprocessing.Queue()
 
@@ -82,6 +85,19 @@ def main(args):
         combinations = Combinations(ascii_lowercase, text_length)
         for indices in chunk_indices(len(combinations), len(workers)):
             queue_in.put(Job(combinations, *indices))
+
+    while any(worker.is_alive() for worker in workers):
+        try:
+            solution = queue_out.get(timeout = 0.1)
+            if solution:
+                t2 = time.perf_counter()
+                print(f"{solution} (found in {t2-t1:.1f}s)")
+                break
+        except queue.Empty:
+            pass
+    else:
+        print("Unableto find a solution")
+
 def parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument("hash_value")
