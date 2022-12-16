@@ -11,6 +11,15 @@ def reverse_md5(hash_value, alphabet = ascii_lowercase, max_length = 6):
             if hashed == hash_value:
                 return text_bytes.decode("utf-8")
 
+def chunk_indices(length, num_chunks):
+    start = 0
+    while num_chunks > 0:
+        num_chunks = min(num_chunks, length)
+        chunk_size = round(length / num_chunks)
+        yield start, (start := start + chunk_size)
+        length -= chunk_size
+        num_chunks -=1
+        
 def main():
     t1 = time.perf_counter()
     text = reverse_md5("a9d1cbf71942327e98b40cf5ef38a960")
