@@ -26,21 +26,6 @@ class Combinations:
             ]
             for i in reversed(range(self.length))
         )
-class Worker(multiprocessing.Process):
-    def __init__(self, queue_in, queue_out, hash_value):
-        super().__init__(daemon = True)
-        self.queue_in = queue_in
-        self.queue_out = queue_out
-
-    def run (self):
-        while True:
-            job = self.queue_in.get()
-            if job is POISON_PILL:
-                self.queue_in.put(POISON_PILL)
-                break
-            if plaintext := job(self.hash_value):
-                self.queue_out.put(plaintext)
-                break
 
 @dataclass(frozen=True)
 class Job:
@@ -53,7 +38,24 @@ class Job:
             text_bytes = self.combinations[index].encode("utf-8")
             hashed = md5(text_bytes).hexdigest()
             if hashed == hash_value:
-                return text_bytes.decode("utf-8")                
+                return text_bytes.decode("utf-8")     
+
+class Worker(multiprocessing.Process):
+    def __init__(self, queue_in, queue_out, hash_value):
+        super().__init__(daemon = True)
+        self.queue_in = queue_in
+        self.queue_out = queue_out
+        self.hash_value = hash_value
+
+    def run (self):
+        while True:
+            job = self.queue_in.get()
+            if job is POISON_PILL:
+                self.queue_in.put(POISON_PILL)
+                break
+            if plaintext := job(self.hash_value):
+                self.queue_out.put(plaintext)
+                break           
 
 def reverse_md5(hash_value, alphabet = ascii_lowercase, max_length = 6):
     for length in range(1, max_length + 1):
