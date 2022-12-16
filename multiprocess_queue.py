@@ -3,6 +3,14 @@ from hashlib import md5
 from itertools import product
 from string import ascii_lowercase
 
+class Combinations:
+    def __init__(self, alphabet, length):
+        self.alphabet = alphabet
+        self.length = length
+    
+    def __length__(self):
+        return len(self.alphabet) ** self.length
+
 def reverse_md5(hash_value, alphabet = ascii_lowercase, max_length = 6):
     for length in range(1, max_length + 1):
         for combination in product(alphabet, repeat = length):
@@ -19,7 +27,7 @@ def chunk_indices(length, num_chunks):
         yield start, (start := start + chunk_size)
         length -= chunk_size
         num_chunks -=1
-        
+
 def main():
     t1 = time.perf_counter()
     text = reverse_md5("a9d1cbf71942327e98b40cf5ef38a960")
