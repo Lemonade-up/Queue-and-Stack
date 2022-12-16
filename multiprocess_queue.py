@@ -8,7 +8,7 @@ class Combinations:
         self.alphabet = alphabet
         self.length = length
     
-    def __length__(self):
+    def __len__(self):
         return len(self.alphabet) ** self.length
 
     def __getitem__(self, index):
@@ -18,6 +18,7 @@ class Combinations:
             self.alphabet[
                 (index // len(self.alphabet) ** i) % len(self.alphabet)
             ]
+            for i in reversed(range(self.length))
         )
 
 def reverse_md5(hash_value, alphabet = ascii_lowercase, max_length = 6):
